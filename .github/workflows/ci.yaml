@@ -42,7 +42,7 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v6
         with:
-          tags: 'ci/r10k:${{ matrix.version }}'
+          tags: 'ci/r10k:${{ matrix.rubygem_r10k }}'
           context: .
           push: false
           build-args: |
