@@ -1,6 +1,7 @@
 FROM alpine:3.20
 
-ARG VERSION="4.1.0"
+ARG APK_GIT=2.45.2-r0
+ARG RUBYGEM_R10K=4.1.0
 
 LABEL org.label-schema.maintainer="Voxpupuli Team <voxpupuli@groups.io>" \
       org.label-schema.vendor="Voxpupuli" \
@@ -10,7 +11,7 @@ LABEL org.label-schema.maintainer="Voxpupuli Team <voxpupuli@groups.io>" \
       org.label-schema.vcs-url="https://github.com/voxpupuli/container-r10k" \
       org.label-schema.schema-version="1.0" \
       org.label-schema.dockerfile="/Dockerfile" \
-      org.label-schema.version="$VERSION"
+      org.label-schema.version="$RUBYGEM_R10K"
 
 # in alpine 3.20 "ping" is the group of id 999
 RUN adduser -G ping -D -u 999 puppet
@@ -19,16 +20,16 @@ RUN apk update \
     && apk upgrade \
     && apk add --no-cache \
       gcc \
-      git \
+      git=${APK_GIT} \
+      libssh2 \
       make \
       musl-dev \
       openssh-client \
       ruby \
       ruby-dev \
-      ruby-rugged \
-      libssh2-1
+      ruby-rugged
 
-RUN gem install --no-doc r10k:"$VERSION"
+RUN gem install --no-doc r10k:"$RUBYGEM_R10K"
 
 USER puppet
 WORKDIR /home/puppet
