@@ -1,4 +1,4 @@
-FROM alpine:3.20
+FROM alpine:3.21
 
 ARG APK_GIT=2.45.2-r0
 ARG RUBYGEM_R10K=5.0.0
