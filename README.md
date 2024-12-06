@@ -1,4 +1,4 @@
-# Vox Pupuli Test Box
+# Vox Pupuli R10K
 
 [![CI](https://github.com/voxpupuli/container-r10k/actions/workflows/ci.yaml/badge.svg)](https://github.com/voxpupuli/container-r10k/actions/workflows/ci.yaml)
 [![License](https://img.shields.io/github/license/voxpupuli/container-r10k.svg)](https://github.com/voxpupuli/container-r10k/blob/main/LICENSE)
