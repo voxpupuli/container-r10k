@@ -2,6 +2,7 @@
   "include": [
     {
       "rubygem_r10k": "5.0.0",
+      "rubygem_puppet": "8.10.0",
       "apk_git": "2.45.2-r0"
     }
   ]

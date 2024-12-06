@@ -19,13 +19,13 @@ jobs:
       - id: set-matrix
         run: echo "matrix=$(jq -c . build_versions.json)" >> $GITHUB_OUTPUT
 
-  # general_ci:
-  #   uses: voxpupuli/crafty/.github/workflows/general_ci.yaml@main
-  #   with:
-  #     shellcheck_scan_dir: '.'
+  general_ci:
+    uses: voxpupuli/crafty/.github/workflows/general_ci.yaml@main
+    with:
+      shellcheck_scan_dir: '.'
 
   build_test_container:
-    name: 'Build test container'
+    name: 'Build and test the container'
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -39,7 +39,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build image
+      - name: Build container
         uses: docker/build-push-action@v6
         with:
           tags: 'ci/r10k:${{ matrix.rubygem_r10k }}'
@@ -47,11 +47,15 @@ jobs:
           push: false
           build-args: |
             RUBYGEM_R10K=${{ matrix.rubygem_r10k }}
+            RUBYGEM_PUPPET=${{ matrix.rubygem_puppet }}
             APK_GIT=${{ matrix.apk_git }}
+
+      - name: Test container
+        run: docker run --rm ci/r10k:${{ matrix.rubygem_r10k }} deploy environment -mv
 
   tests:
     needs:
-      # - general_ci
+      - general_ci
       - build_test_container
     runs-on: ubuntu-latest
     name: Test suite
