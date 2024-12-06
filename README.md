@@ -6,7 +6,46 @@
 
 ## Introduction
 
-This container should be used to deploy code with r10k. It has the r10k gem and all dependencies installed.
+This container is designed for deploying Puppet code using r10k. It includes the r10k gem along with all necessary dependencies pre-installed, ensuring a seamless deployment process.
+
+## Usage
+
+To run r10k, simply execute the container. The r10k binary is set as the default entrypoint. The container operates as the puppet user with a UID/GID of 999. You can use a shared volume with a Puppet server and mount it at `/etc/puppetlabs/code/environments`.
+
+```shell
+podman run -it --rm -v code_dir:/etc/puppetlabs/code/environments:Z ghcr.io/voxpupuli/r10k:latest deploy environment -mv
+```
+
+```yaml
+services:
+  r10k:
+    image: ghcr.io/voxpupuli/r10k:5.0.0-latest
+    environment:
+      - PUPPET_CONTROL_REPO=https://github.com/my-org/control-repo.git
+    volumes:
+      - puppetserver-code-dir:/etc/puppetlabs/code/environments:Z
+    entrypoint: ["/docker-entrypoint.sh"]
+    command: ["deploy", "environment", "-mv"]
+```
+
+### Environment Variables
+
+| Name | Description |
+| ---- | ------------|
+| `PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to https://github.com/voxpupuli/controlrepo.git |
+
+## Build
+
+### Build Arguments
+
+| Name | Description |
+| ---- | ------------|
+|`APK_GIT`| The git version to install |
+|`RUBYGEM_R10K`| The r10k version to install |
+|`RUBYGEM_PUPPET`| The puppet version to install |
+|`PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to https://github.com/voxpupuli/controlrepo.git |
+|`UID`| The user id to use for the puppet user. Defaults to `999` |
+|`GID`| The group to use for the puppet user. Defaults to `ping` |
 
 ## Version Schema
 
