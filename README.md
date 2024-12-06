@@ -13,9 +13,8 @@ This container should be used to deploy code with r10k. It has the r10k gem and 
 The version schema has the following layout:
 
 ```text
-<puppet.major>.<puppet.minor>.<puppet.patch>-v<container.major>.<container.minor>.<container.patch>
-<puppet.major>-v<container.major>.<container.minor>.<container.patch>
-<puppet.major>
+<r10k.major>.<r10k.minor>.<r10k.patch>-v<container.major>.<container.minor>.<container.patch>
+<r10k.major>.<r10k.minor>.<r10k.patch>-latest
 latest
 ```
 
