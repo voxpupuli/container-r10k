@@ -1,7 +1,7 @@
 FROM alpine:3.20
 
 ARG APK_GIT=2.45.2-r0
-ARG RUBYGEM_R10K=4.1.0
+ARG RUBYGEM_R10K=5.0.0
 
 LABEL org.label-schema.maintainer="Voxpupuli Team <voxpupuli@groups.io>" \
       org.label-schema.vendor="Voxpupuli" \
