@@ -1,6 +1,5 @@
 FROM alpine:3.20
 
-ARG APK_GIT=2.45.2-r0
 ARG RUBYGEM_R10K=5.0.0
 ARG RUBYGEM_PUPPET=8.10.0
 
@@ -28,7 +27,7 @@ RUN apk update \
     && apk add --no-cache \
       bash \
       gcc \
-      git=${APK_GIT} \
+      git \
       libssh2 \
       make \
       musl-dev \

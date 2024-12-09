@@ -48,7 +48,6 @@ jobs:
           build-args: |
             RUBYGEM_R10K=${{ matrix.rubygem_r10k }}
             RUBYGEM_PUPPET=${{ matrix.rubygem_puppet }}
-            APK_GIT=${{ matrix.apk_git }}
 
       - name: Test container
         run: docker run --rm ci/r10k:${{ matrix.rubygem_r10k }} deploy environment -mv
