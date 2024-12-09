@@ -40,7 +40,6 @@ services:
 
 | Name | Description |
 | ---- | ------------|
-|`APK_GIT`| The git version to install |
 |`RUBYGEM_R10K`| The r10k version to install |
 |`RUBYGEM_PUPPET`| The puppet version to install |
 |`PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to https://github.com/voxpupuli/controlrepo.git |
