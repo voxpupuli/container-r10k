@@ -1,0 +1,8 @@
+{
+  "include": [
+    {
+      "rubygem_r10k": "5.0.0",
+      "rubygem_puppet": "8.10.0"
+    }
+  ]
+}
