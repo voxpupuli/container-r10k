@@ -3,8 +3,7 @@ FROM alpine:3.21
 ARG RUBYGEM_R10K=5.0.0
 ARG RUBYGEM_PUPPET=8.10.0
 
-ARG PUPPET_CONTROL_REPO="https://github.com/voxpupuli/controlrepo.git"
-ENV PUPPET_CONTROL_REPO=$PUPPET_CONTROL_REPO
+ARG DEFAULT_CONTROL_REPO="https://github.com/voxpupuli/controlrepo.git"
 
 ARG UID=999
 # in alpine 3.20 "ping" is the group of id 999
