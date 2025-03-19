@@ -25,7 +25,6 @@ RUN adduser -G $GID -D -u $UID puppet
 RUN apk update \
     && apk upgrade \
     && apk add --no-cache \
-      bash \
       gcc \
       git \
       libssh2 \
@@ -40,19 +39,14 @@ COPY r10k/docker-entrypoint.d /docker-entrypoint.d/
 COPY r10k/docker-entrypoint.sh Dockerfile /
 
 RUN mkdir -p /etc/puppetlabs/r10k /opt/puppetlabs/bin /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments \
-    && chown -R puppet: /etc/puppetlabs/r10k /opt/puppetlabs/bin /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments \
-    && chmod +x /docker-entrypoint.sh \
-    && mkdir -p /home/puppet \
-    && chown -R puppet: /home/puppet
+    && chown -R puppet: /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments \
+    && chmod +x /docker-entrypoint.sh
 
-USER puppet
-WORKDIR /home/puppet
-
-ENV PATH="/home/puppet/.local/share/gem/ruby/3.3.0/bin:${PATH}"
-RUN gem install --no-doc r10k:"$RUBYGEM_R10K" --user-install \
-    && gem install --no-doc puppet:"$RUBYGEM_PUPPET" --user-install \
-    && gem install --no-doc toml rexml --user-install \
-    && ln -s /home/puppet/.local/share/gem/ruby/3.3.0/bin/puppet /opt/puppetlabs/bin/puppet
+RUN gem install --no-doc r10k:"${RUBYGEM_R10K}" \
+    && gem install --no-doc puppet:"${RUBYGEM_PUPPET}" \
+    && gem install --no-doc toml rexml \
+    && ln -s "/usr/lib/ruby/gems/3.3.0/gems/r10k-${RUBYGEM_R10K}/bin/r10k" /usr/local/bin/r10k \
+    && ln -s "/usr/lib/ruby/gems/3.3.0/gems/puppet-${RUBYGEM_PUPPET}/bin/puppet" /opt/puppetlabs/bin/puppet
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["help"]

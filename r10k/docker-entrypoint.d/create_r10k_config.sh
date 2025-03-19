@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 cat > /etc/puppetlabs/r10k/r10k.yaml << EOF
 ---
