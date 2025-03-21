@@ -35,7 +35,9 @@ LABEL org.label-schema.maintainer="Voxpupuli Team <voxpupuli@groups.io>" \
       org.label-schema.dockerfile="/Dockerfile" \
       org.label-schema.version="$RUBYGEM_R10K"
 
-RUN apk add --no-cache git libssh2 musl openssh-client ruby ruby-rugged
+RUN apk update && apk upgrade \
+    && apk add --no-cache git libssh2 musl openssh-client ruby ruby-rugged \
+    && rm /var/cache/apk/* 
 
 COPY r10k/docker-entrypoint.d /docker-entrypoint.d
 COPY r10k/docker-entrypoint.sh Dockerfile /
