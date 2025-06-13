@@ -39,7 +39,7 @@ jobs:
             RUBYGEM_PUPPET=${{ matrix.rubygem_puppet }}
           build_arch: linux/amd64,linux/arm64
           docker_username: voxpupulibot
-          docker_password: ${{ secrets.DOCKERHUB_BOT_PASSWORD }}
+          docker_password: ${{ secrets.DOCKERHUB_BOT_ADMIN_TOKEN }}
           build_context: .
           buildfile: Dockerfile
           tags: |
@@ -54,5 +54,5 @@ jobs:
         uses: peter-evans/dockerhub-description@v4
         with:
           username: voxpupulibot
-          password: ${{ secrets.DOCKERHUB_BOT_PASSWORD }}
+          password: ${{ secrets.DOCKERHUB_BOT_ADMIN_TOKEN }}
           repository: voxpupuli/r10k
