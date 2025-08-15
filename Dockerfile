@@ -1,7 +1,7 @@
 ARG RUBYGEM_R10K=5.0.0
 ARG RUBYGEM_PUPPET=8.10.0
 
-FROM docker.io/library/alpine:3.21 AS builder
+FROM docker.io/library/alpine:3.22 AS builder
 ARG RUBYGEM_R10K
 ARG RUBYGEM_PUPPET
 
@@ -13,7 +13,7 @@ RUN gem install --no-doc r10k:"${RUBYGEM_R10K}" \
     && gem install --no-doc toml rexml
 
 
-FROM docker.io/library/alpine:3.21
+FROM docker.io/library/alpine:3.22
 ARG RUBYGEM_R10K
 ARG RUBYGEM_PUPPET
 
