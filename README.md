@@ -41,7 +41,7 @@ services:
 | Name | Description |
 | ---- | ------------|
 |`RUBYGEM_R10K`| The r10k version to install |
-|`RUBYGEM_PUPPET`| The puppet version to install |
+|`RUBYGEM_OPENVOX`| The openvox version to install |
 |`PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to https://github.com/voxpupuli/controlrepo.git |
 |`UID`| The user id to use for the puppet user. Defaults to `999` |
 |`GID`| The group to use for the puppet user. Defaults to `ping` |
