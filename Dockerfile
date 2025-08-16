@@ -1,21 +1,21 @@
 ARG RUBYGEM_R10K=5.0.0
-ARG RUBYGEM_PUPPET=8.10.0
+ARG RUBYGEM_OPENVOX=8.21.1
 
 FROM docker.io/library/alpine:3.22 AS builder
 ARG RUBYGEM_R10K
-ARG RUBYGEM_PUPPET
+ARG RUBYGEM_OPENVOX
 
 WORKDIR /build
 RUN apk add --no-cache gcc make musl-dev ruby-dev
 
 RUN gem install --no-doc r10k:"${RUBYGEM_R10K}" \
-    && gem install --no-doc puppet:"${RUBYGEM_PUPPET}" \
-    && gem install --no-doc toml rexml
+    && gem install --no-doc openvox:"${RUBYGEM_OPENVOX}" \
+    && gem install --no-doc toml rexml syslog
 
 
 FROM docker.io/library/alpine:3.22
 ARG RUBYGEM_R10K
-ARG RUBYGEM_PUPPET
+ARG RUBYGEM_OPENVOX
 
 ARG PUPPET_CONTROL_REPO="https://github.com/voxpupuli/controlrepo.git"
 ENV PUPPET_CONTROL_REPO=$PUPPET_CONTROL_REPO
@@ -46,7 +46,7 @@ COPY --from=builder /usr/lib/ruby/gems /usr/lib/ruby/gems
 RUN mkdir -p /etc/puppetlabs/r10k /opt/puppetlabs/bin /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments \
     && chown puppet: /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments \
     && ln -s "/usr/lib/ruby/gems/3.4.0/gems/r10k-${RUBYGEM_R10K}/bin/r10k" /usr/local/bin/r10k \
-    && ln -s "/usr/lib/ruby/gems/3.4.0/gems/puppet-${RUBYGEM_PUPPET}/bin/puppet" /opt/puppetlabs/bin/puppet \
+    && ln -s "/usr/lib/ruby/gems/3.4.0/gems/puppet-${RUBYGEM_OPENVOX}}/bin/puppet" /opt/puppetlabs/bin/puppet \
     && chmod +x /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

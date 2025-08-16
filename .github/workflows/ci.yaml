@@ -47,7 +47,7 @@ jobs:
           push: false
           build-args: |
             RUBYGEM_R10K=${{ matrix.rubygem_r10k }}
-            RUBYGEM_PUPPET=${{ matrix.rubygem_puppet }}
+            RUBYGEM_OPENVOX=${{ matrix.rubygem_openvox }}
 
       - name: Test container
         run: docker run --rm ci/r10k:${{ matrix.rubygem_r10k }} deploy environment -mv
