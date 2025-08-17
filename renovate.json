@@ -1,5 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "addLabels": [
+    "dependencies",
+    "renovate"
+  ],
   "assigneesFromCodeOwners": true,
   "automerge": true,
   "automergeType": "pr",
@@ -7,8 +11,8 @@
     {
       "customType": "regex",
       "datasourceTemplate": "rubygems",
-      "managerFilePatterns": [
-        "/build_versions.yaml/"
+      "fileMatch": [
+        "build_versions.yaml"
       ],
       "matchStrings": [
         "rubygem_(?<depName>[a-z0-9_]+):\\s+'(?<currentValue>\\d+\\.\\d+\\.\\d+)'"
@@ -17,8 +21,8 @@
     {
       "customType": "regex",
       "datasourceTemplate": "deb",
-      "managerFilePatterns": [
-        "/build_versions.yaml/"
+      "fileMatch": [
+        "build_versions.yaml"
       ],
       "matchStrings": [
         "#\\s*renovate:\\s*depName=(?<depName>.*?)\\s*openVoxRelease=(?<openVoxRelease>\\d+)\\s*\\n\\s*(?<key>\\w+_version):\\s*\"(?<currentValue>.*?)\""
@@ -29,15 +33,10 @@
   "extends": [
     "config:recommended"
   ],
-  "addLabels": [
-    "dependencies",
-    "renovate",
-    "github_actions"
-  ],
   "vulnerabilityAlerts": {
-    "enabled": true,
     "addLabels": [
       "security"
-    ]
+    ],
+    "enabled": true
   }
 }
