@@ -10,7 +10,10 @@ This container is designed for deploying Puppet code using r10k. It includes the
 
 ## Usage
 
-To run r10k, simply execute the container. The r10k binary is set as the default entrypoint. The container operates as the puppet user with a UID/GID of 999. You can use a shared volume with a Puppet server and mount it at `/etc/puppetlabs/code/environments`.
+To run r10k, simply execute the container.
+The r10k binary is set as the default entrypoint.
+The container operates as the puppet user with a UID/GID of 999.
+You can use a shared volume with a Puppet server and mount it at `/etc/puppetlabs/code/environments`.
 
 ```shell
 podman run -it --rm -v code_dir:/etc/puppetlabs/code/environments:Z ghcr.io/voxpupuli/r10k:latest deploy environment -mv
@@ -32,7 +35,7 @@ services:
 
 | Name | Description |
 | ---- | ------------|
-| `PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to https://github.com/voxpupuli/controlrepo.git |
+| `PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to <https://github.com/voxpupuli/controlrepo.git> |
 
 ## Build
 
@@ -42,7 +45,7 @@ services:
 | ---- | ------------|
 |`RUBYGEM_R10K`| The r10k version to install |
 |`RUBYGEM_OPENVOX`| The openvox version to install |
-|`PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to https://github.com/voxpupuli/controlrepo.git |
+|`PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to <https://github.com/voxpupuli/controlrepo.git> |
 |`UID`| The user id to use for the puppet user. Defaults to `999` |
 |`GID`| The group to use for the puppet user. Defaults to `ping` |
 
