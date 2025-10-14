@@ -42,8 +42,8 @@ jobs:
       - name: Build container
         uses: docker/build-push-action@v6
         with:
+          file: Containerfile
           tags: 'ci/r10k:${{ matrix.rubygem_r10k }}'
-          context: .
           push: false
           build-args: |
             RUBYGEM_R10K=${{ matrix.rubygem_r10k }}

@@ -12,6 +12,7 @@ RUN gem install --no-doc r10k:"${RUBYGEM_R10K}" \
     && gem install --no-doc openvox:"${RUBYGEM_OPENVOX}" \
     && gem install --no-doc toml rexml syslog
 
+###############################################################################
 
 FROM docker.io/library/alpine:3.22
 ARG RUBYGEM_R10K
@@ -32,22 +33,22 @@ LABEL org.label-schema.maintainer="Voxpupuli Team <voxpupuli@groups.io>" \
       org.label-schema.license="AGPL-3.0-or-later" \
       org.label-schema.vcs-url="https://github.com/voxpupuli/container-r10k" \
       org.label-schema.schema-version="1.0" \
-      org.label-schema.dockerfile="/Dockerfile" \
+      org.label-schema.dockerfile="/Containerfile" \
       org.label-schema.version="$RUBYGEM_R10K"
 
 RUN apk update && apk upgrade \
     && apk add --no-cache git libssh2 musl openssh-client ruby ruby-rugged \
     && rm /var/cache/apk/*
 
-COPY r10k/docker-entrypoint.d /docker-entrypoint.d
-COPY r10k/docker-entrypoint.sh Dockerfile /
+COPY container-entrypoint.d /container-entrypoint.d
+COPY container-entrypoint.sh Containerfile /
 COPY --from=builder /usr/lib/ruby/gems /usr/lib/ruby/gems
 
 RUN mkdir -p /etc/puppetlabs/r10k /opt/puppetlabs/bin /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments \
     && chown puppet: /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments \
     && ln -s "/usr/lib/ruby/gems/3.4.0/gems/r10k-${RUBYGEM_R10K}/bin/r10k" /usr/local/bin/r10k \
     && ln -s "/usr/lib/ruby/gems/3.4.0/gems/openvox-${RUBYGEM_OPENVOX}/bin/puppet" /opt/puppetlabs/bin/puppet \
-    && chmod +x /docker-entrypoint.sh
+    && chmod +x /container-entrypoint.sh
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/container-entrypoint.sh"]
 CMD ["help"]
