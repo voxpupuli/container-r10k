@@ -37,7 +37,7 @@ LABEL org.label-schema.maintainer="Voxpupuli Team <voxpupuli@groups.io>" \
       org.label-schema.version="$RUBYGEM_R10K"
 
 RUN apk update && apk upgrade \
-    && apk add --no-cache git libssh2 musl openssh-client ruby ruby-rugged \
+    && apk add --no-cache git libssh2 musl openssh-client ruby ruby-rugged curl \
     && rm /var/cache/apk/*
 
 COPY container-entrypoint.d /container-entrypoint.d
