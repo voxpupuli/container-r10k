@@ -27,7 +27,7 @@ services:
       - PUPPET_CONTROL_REPO=https://github.com/my-org/control-repo.git
     volumes:
       - puppetserver-code-dir:/etc/puppetlabs/code/environments:Z
-    entrypoint: ["/docker-entrypoint.sh"]
+    entrypoint: ["/container-entrypoint.sh"]
     command: ["deploy", "environment", "-mv"]
 ```
 
