@@ -34,7 +34,7 @@ services:
 ### Environment Variables
 
 | Name | Description |
-| ---- | ------------|
+| --- | --- |
 | `PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to <https://github.com/voxpupuli/controlrepo.git> |
 
 ## Build
@@ -42,12 +42,12 @@ services:
 ### Build Arguments
 
 | Name | Description |
-| ---- | ------------|
-|`RUBYGEM_R10K`| The r10k version to install |
-|`RUBYGEM_OPENVOX`| The openvox version to install |
-|`PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to <https://github.com/voxpupuli/controlrepo.git> |
-|`UID`| The user id to use for the puppet user. Defaults to `999` |
-|`GID`| The group to use for the puppet user. Defaults to `ping` |
+| --- | --- |
+| `RUBYGEM_R10K` | The r10k version to install |
+| `RUBYGEM_OPENVOX` | The openvox version to install |
+| `PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to <https://github.com/voxpupuli/controlrepo.git> |
+| `UID` | The user id to use for the puppet user. Defaults to `999` |
+| `GID` | The group to use for the puppet user. Defaults to `ping` |
 
 ## Version Schema
 
@@ -69,9 +69,9 @@ docker pull ghcr.io/voxpupuli/r10k:latest
 
 | Name | Description |
 | --- | --- |
-| r10k.major    | Describes the contained major r10k version |
-| r10k.minor    | Describes the contained minor r10k version |
-| r10k.patch    | Describes the contained patch r10k version |
+| r10k.major | Describes the contained major r10k version |
+| r10k.minor | Describes the contained minor r10k version |
+| r10k.patch | Describes the contained patch r10k version |
 | container.major | Describes breaking changes without backward compatibility |
 | container.minor | Describes new features or refactoring with backward compatibility |
 | container.patch | Describes if minor changes or bugfixes have been implemented |
