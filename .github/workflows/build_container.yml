@@ -16,7 +16,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: Source checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - id: set-matrix
         run: echo "matrix=$(cat build_versions.json | jq -c)" >> $GITHUB_OUTPUT
