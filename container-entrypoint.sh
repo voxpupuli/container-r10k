@@ -7,5 +7,4 @@ for f in /container-entrypoint.d/*.sh; do
 	"$f"
 done
 
-args="$@"
-su puppet -c "exec r10k $args"
+exec r10k "$@"
