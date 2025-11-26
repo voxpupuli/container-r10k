@@ -44,8 +44,8 @@ COPY container-entrypoint.d /container-entrypoint.d
 COPY container-entrypoint.sh Containerfile /
 COPY --from=builder /usr/lib/ruby/gems /usr/lib/ruby/gems
 
-RUN mkdir -p /etc/puppetlabs/r10k /opt/puppetlabs/bin /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments \
-    && chown puppet: /etc/puppetlabs/r10k /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments \
+RUN mkdir -p /etc/puppetlabs/r10k /opt/puppetlabs/bin /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments /home/puppet/.ssh \
+    && chown puppet: /etc/puppetlabs/r10k /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments /home/puppet/.ssh \
     && ln -s "/usr/lib/ruby/gems/3.4.0/gems/r10k-${RUBYGEM_R10K}/bin/r10k" /usr/local/bin/r10k \
     && ln -s "/usr/lib/ruby/gems/3.4.0/gems/openvox-${RUBYGEM_OPENVOX}/bin/puppet" /opt/puppetlabs/bin/puppet \
     && chmod +x /container-entrypoint.sh
