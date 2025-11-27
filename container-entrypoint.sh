@@ -2,7 +2,9 @@
 
 set -e
 
-find /container-entrypoint.d/ -type f -name "*.sh" -exec echo Running {} \; -exec {} \;
+for f in /container-entrypoint.d/*.sh; do
+	echo "Running $f"
+	"$f"
+done
 
-args="$@"
-su puppet -c "exec r10k $args"
+exec r10k "$@"
