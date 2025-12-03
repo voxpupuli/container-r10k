@@ -1,7 +1,7 @@
 ARG RUBYGEM_R10K=5.0.0
 ARG RUBYGEM_OPENVOX=8.21.1
 
-FROM docker.io/library/alpine:3.22 AS builder
+FROM docker.io/library/alpine:3.23 AS builder
 ARG RUBYGEM_R10K
 ARG RUBYGEM_OPENVOX
 
@@ -14,7 +14,7 @@ RUN gem install --no-doc r10k:"${RUBYGEM_R10K}" \
 
 ###############################################################################
 
-FROM docker.io/library/alpine:3.22
+FROM docker.io/library/alpine:3.23
 ARG RUBYGEM_R10K
 ARG RUBYGEM_OPENVOX
 
