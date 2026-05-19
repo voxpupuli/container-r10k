@@ -50,6 +50,31 @@ RUN mkdir -p /etc/puppetlabs/r10k /opt/puppetlabs/bin /opt/puppetlabs/puppet/cac
     && ln -s "/usr/lib/ruby/gems/3.4.0/gems/openvox-${RUBYGEM_OPENVOX}/bin/puppet" /opt/puppetlabs/bin/puppet \
     && chmod +x /container-entrypoint.sh /container-entrypoint.d/*.sh
 
+ARG SUPERCRONIC_VERSION=v0.2.45
+ARG SUPERCRONIC_BASE_URL=https://github.com/aptible/supercronic/releases/download
+
+RUN set -eux; \
+    ARCH="${TARGETARCH:-$(uname -m)}"; \
+    case "${ARCH}" in \
+      amd64|x86_64) \
+        SUPERCRONIC_BIN="supercronic-linux-amd64"; \
+        SUPERCRONIC_SHA1SUM="e894b193bea75a5ee644e700c59e30eedc804cf7"; \
+        ;; \
+      arm64|aarch64) \
+        SUPERCRONIC_BIN="supercronic-linux-arm64"; \
+        SUPERCRONIC_SHA1SUM="20ce6dace414a64f0632f4092d6d3745db6085ad"; \
+        ;; \
+      *) \
+        echo "Unsupported architecture: ${ARCH}"; \
+        exit 1; \
+        ;; \
+    esac; \
+    curl -fsSLO "${SUPERCRONIC_BASE_URL}/${SUPERCRONIC_VERSION}/${SUPERCRONIC_BIN}" \
+    && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC_BIN}" | sha1sum -c - \
+    && chmod +x "${SUPERCRONIC_BIN}" \
+    && mv "${SUPERCRONIC_BIN}" "/usr/local/bin/${SUPERCRONIC_BIN}" \
+    && ln -s "/usr/local/bin/${SUPERCRONIC_BIN}" /usr/local/bin/supercronic
+
 USER puppet
 
 ENTRYPOINT ["/container-entrypoint.sh"]
