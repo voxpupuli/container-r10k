@@ -1,7 +1,7 @@
 ARG RUBYGEM_R10K=5.0.0
 ARG RUBYGEM_OPENVOX=8.21.1
 ARG SUPERCRONIC_VERSION=v0.2.45
-ARG  SUPERCRONIC_BASE_URL=https://github.com/aptible/supercronic/releases/download
+ARG SUPERCRONIC_BASE_URL=https://github.com/aptible/supercronic/releases/download
 
 FROM docker.io/library/alpine:3.23 AS builder
 ARG RUBYGEM_R10K
