@@ -1,7 +1,5 @@
 ARG RUBYGEM_R10K=5.0.0
 ARG RUBYGEM_OPENVOX=8.21.1
-ARG SUPERCRONIC_VERSION=v0.2.45
-ARG SUPERCRONIC_BASE_URL=https://github.com/aptible/supercronic/releases/download
 
 FROM docker.io/library/alpine:3.23 AS builder
 ARG RUBYGEM_R10K
@@ -52,7 +50,8 @@ RUN mkdir -p /etc/puppetlabs/r10k /opt/puppetlabs/bin /opt/puppetlabs/puppet/cac
     && ln -s "/usr/lib/ruby/gems/3.4.0/gems/openvox-${RUBYGEM_OPENVOX}/bin/puppet" /opt/puppetlabs/bin/puppet \
     && chmod +x /container-entrypoint.sh /container-entrypoint.d/*.sh
 
-
+ARG SUPERCRONIC_VERSION=v0.2.45
+ARG SUPERCRONIC_BASE_URL=https://github.com/aptible/supercronic/releases/download
 
 RUN set -eux; \
     ARCH="${TARGETARCH:-$(uname -m)}"; \
