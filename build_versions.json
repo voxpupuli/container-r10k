@@ -1,8 +1,8 @@
 {
   "include": [
     {
-      "rubygem_r10k": "5.0.0",
-      "rubygem_openvox": "8.21.1"
+      "rubygem_r10k": "5.0.3",
+      "rubygem_openvox": "8.27.0"
     }
   ]
 }
