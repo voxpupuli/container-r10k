@@ -1,10 +1,24 @@
 ---
-.github/workflows/ci.yml:
+:global:
   matrix_command: jq -c . build_versions.json
-  general_ci_scan_dir: .
   image_tag: 'ci/r10k:${{ matrix.rubygem_r10k }}'
   build_args:
     - 'RUBYGEM_R10K=${{ matrix.rubygem_r10k }}'
     - 'RUBYGEM_OPENVOX=${{ matrix.rubygem_openvox }}'
+.github/workflows/ci.yml:
+  general_ci_scan_dir: .
   test_commands:
     - 'docker run --rm ci/r10k:${{ matrix.rubygem_r10k }} deploy environment -mv'
+.github/workflows/security_scanning.yml:
+  scan_job_name: 'Scan r10k ${{ matrix.rubygem_r10k }} container'
+  sarif_category: 'grype-r10k-${{ matrix.rubygem_r10k }}'
+.github/workflows/build_container.yml:
+  publish_build_job_name: 'Build r10k ${{ matrix.rubygem_r10k }} container'
+  publish_tags:
+    - 'ghcr.io/voxpupuli/r10k:${{ matrix.rubygem_r10k }}-${{ github.ref_name }}'
+    - 'ghcr.io/voxpupuli/r10k:${{ matrix.rubygem_r10k }}-latest'
+    - 'ghcr.io/voxpupuli/r10k:latest'
+    - 'docker.io/voxpupuli/r10k:${{ matrix.rubygem_r10k }}-${{ github.ref_name }}'
+    - 'docker.io/voxpupuli/r10k:${{ matrix.rubygem_r10k }}-latest'
+    - 'docker.io/voxpupuli/r10k:latest'
+  dockerhub_repository: voxpupuli/r10k
