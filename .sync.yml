@@ -1,0 +1,10 @@
+---
+.github/workflows/ci.yml:
+  matrix_command: jq -c . build_versions.json
+  general_ci_scan_dir: .
+  image_tag: 'ci/r10k:${{ matrix.rubygem_r10k }}'
+  build_args:
+    - 'RUBYGEM_R10K=${{ matrix.rubygem_r10k }}'
+    - 'RUBYGEM_OPENVOX=${{ matrix.rubygem_openvox }}'
+  test_commands:
+    - 'docker run --rm ci/r10k:${{ matrix.rubygem_r10k }} deploy environment -mv'
