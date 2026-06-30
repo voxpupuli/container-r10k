@@ -21,10 +21,10 @@ ARG RUBYGEM_OPENVOX
 ARG PUPPET_CONTROL_REPO="https://github.com/voxpupuli/controlrepo.git"
 ENV PUPPET_CONTROL_REPO=$PUPPET_CONTROL_REPO
 
-ARG UID=999
-ARG GID=ping   # in alpine 3.x "ping" is the group of id 999
+ARG UID=64604
+ARG GID=64604
 
-RUN adduser -G $GID -D -u $UID puppet
+RUN adduser -g $GID -D -u $UID puppet
 
 LABEL org.label-schema.maintainer="Voxpupuli Team <voxpupuli@groups.io>" \
       org.label-schema.vendor="Voxpupuli" \
