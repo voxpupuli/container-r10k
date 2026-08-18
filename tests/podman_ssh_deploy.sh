@@ -43,7 +43,12 @@ WORKDIR="$(mktemp -d)"
 cleanup() {
 	podman rm -f "$CRON" "$SERVER" >/dev/null 2>&1 || true
 	podman network rm -f "$NET" >/dev/null 2>&1 || true
-	rm -rf "$WORKDIR"
+	# On rootless podman the :U mounts chown files to subuids the host user
+	# cannot delete; remove them from inside the user namespace, where a
+	# container root has authority over all mapped UIDs.
+	podman run --rm -v "$WORKDIR:/w" docker.io/library/alpine:3.22 \
+		sh -c 'rm -rf /w/environments /w/cache /w/dot_ssh' >/dev/null 2>&1 || true
+	rm -rf "$WORKDIR" 2>/dev/null || true
 }
 trap cleanup EXIT
 
