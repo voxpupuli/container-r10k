@@ -60,7 +60,39 @@ services:
     command: ["deploy", "environment", "-mv"]
 ```
 
-### Environment Variables
+### Scheduled deploys
+
+The image includes `supercronic` for scheduled deployments.
+The default entrypoint starts `container-entrypoint.sh`.
+Override the entrypoint to use `supercronic` as the long-running process.
+Run each script in `/container-entrypoint.d/` before starting `supercronic`.
+This preserves the setup normally performed by the default entrypoint.
+
+Create a `crontab` file with the desired schedule.
+Supercronic supports seven-field cron expressions with seconds as the first field.
+The fields represent second, minute, hour, day of month, month, day of week, and year.
+This example deploys all environments every 15 minutes:
+
+```cron
+0 */15 * * * * * /usr/local/bin/r10k deploy environment -mv
+```
+
+Mount the crontab and override the entrypoint when starting the container:
+
+```shell
+podman run -d --name r10k-scheduled \
+  -v ./crontab:/crontab:ro \
+  -v code_dir:/etc/puppetlabs/code/environments:Z \
+  --entrypoint /bin/sh \
+  ghcr.io/voxpupuli/r10k:latest \
+  -c 'for f in /container-entrypoint.d/*.sh; do "$f"; done; exec supercronic /crontab'
+```
+
+The `exec` command makes `supercronic` the main container process.
+Job output and errors are written to the container's standard output and standard error streams.
+Use `podman logs r10k-scheduled` to view the output.
+
+## Environment Variables
 
 | Name | Description |
 | --- | --- |
