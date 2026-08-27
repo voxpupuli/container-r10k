@@ -4,6 +4,18 @@
 [![License](https://img.shields.io/github/license/voxpupuli/container-r10k.svg)](https://github.com/voxpupuli/container-r10k/blob/main/LICENSE)
 [![Sponsored by betadots GmbH](https://img.shields.io/badge/Sponsored%20by-betadots%20GmbH-blue.svg)](https://www.betadots.de)
 
+- [Vox Pupuli R10K](#vox-pupuli-r10k)
+  - [Introduction](#introduction)
+  - [Breaking Changes / Migration Notes](#breaking-changes--migration-notes)
+  - [Usage](#usage)
+    - [Scheduled deploys](#scheduled-deploys)
+  - [Environment Variables](#environment-variables)
+  - [Build](#build)
+    - [Build Arguments](#build-arguments)
+  - [Version Schema](#version-schema)
+  - [How to release?](#how-to-release)
+  - [How to contribute?](#how-to-contribute)
+
 ## Introduction
 
 This container is designed for deploying Puppet code using r10k. It includes the r10k gem along with all necessary dependencies pre-installed, ensuring a seamless deployment process.
