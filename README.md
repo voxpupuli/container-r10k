@@ -18,7 +18,12 @@
 
 ## Introduction
 
-This container is designed for deploying Puppet code using r10k. It includes the r10k gem along with all necessary dependencies pre-installed, ensuring a seamless deployment process.
+This container is designed for deploying Puppet code using r10k.
+It includes the r10k gem along with all necessary dependencies pre-installed, ensuring a seamless deployment process.
+
+## Breaking Changes / Migration Notes
+
+see [MIGRATION.md](MIGRATION.md)
 
 ## Usage
 
