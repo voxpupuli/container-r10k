@@ -20,11 +20,7 @@ ARG RUBYGEM_OPENVOX
 
 ARG PUPPET_CONTROL_REPO="https://github.com/voxpupuli/controlrepo.git"
 ENV PUPPET_CONTROL_REPO=$PUPPET_CONTROL_REPO
-
-ARG UID=999
-ARG GID=ping   # in alpine 3.x "ping" is the group of id 999
-
-RUN adduser -G $GID -D -u $UID puppet
+ENV HOME=/home/puppet
 
 LABEL org.label-schema.maintainer="Voxpupuli Team <voxpupuli@groups.io>" \
       org.label-schema.vendor="Voxpupuli" \
@@ -45,10 +41,22 @@ COPY container-entrypoint.sh Containerfile /
 COPY --from=builder /usr/lib/ruby/gems /usr/lib/ruby/gems
 
 RUN mkdir -p /etc/puppetlabs/r10k /opt/puppetlabs/bin /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments /home/puppet/.ssh \
-    && chown puppet: /etc/puppetlabs/r10k /opt/puppetlabs/puppet/cache/r10k /etc/puppetlabs/code/environments /home/puppet/.ssh \
     && ln -s "/usr/lib/ruby/gems/3.4.0/gems/r10k-${RUBYGEM_R10K}/bin/r10k" /usr/local/bin/r10k \
     && ln -s "/usr/lib/ruby/gems/3.4.0/gems/openvox-${RUBYGEM_OPENVOX}/bin/puppet" /opt/puppetlabs/bin/puppet \
     && chmod +x /container-entrypoint.sh /container-entrypoint.d/*.sh
+
+#  get git to not complain about the volume being owned by a different user
+RUN git config --system --add safe.directory '/etc/puppetlabs/code/*' \
+    && git config --system --add safe.directory '/opt/puppetlabs/puppet/cache/r10k/*'
+
+# group 0 writable (setgid on dirs)
+# /etc/passwd too, so the entrypoint can append an entry for the
+# running UID (openssh requires one)
+# https://developers.redhat.com/blog/2020/10/26/adapting-docker-and-kubernetes-containers-to-run-on-red-hat-openshift-container-platform#volume_mounts:~:text=Applications%20requiring%20the%20user%27s%20name
+RUN chgrp -R 0 /etc/puppetlabs /opt/puppetlabs/puppet/cache /home/puppet \
+    && chmod -R g=u /etc/puppetlabs /opt/puppetlabs/puppet/cache /home/puppet \
+    && find /etc/puppetlabs /opt/puppetlabs/puppet/cache /home/puppet -type d -exec chmod g+s {} + \
+    && chmod g=u /etc/passwd
 
 ARG SUPERCRONIC_VERSION=v0.2.45
 ARG SUPERCRONIC_BASE_URL=https://github.com/aptible/supercronic/releases/download
@@ -75,7 +83,11 @@ RUN set -eux; \
     && mv "${SUPERCRONIC_BIN}" "/usr/local/bin/${SUPERCRONIC_BIN}" \
     && ln -s "/usr/local/bin/${SUPERCRONIC_BIN}" /usr/local/bin/supercronic
 
-USER puppet
+# Keep HOME and runtime-generated passwd entry by podman aligned.
+WORKDIR /home/puppet
+
+# GID 0 is what matters here, UID can be set freely
+USER 64604:0
 
 ENTRYPOINT ["/container-entrypoint.sh"]
 CMD ["help"]
