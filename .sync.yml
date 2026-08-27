@@ -9,6 +9,7 @@
   general_ci_scan_dir: .
   test_commands:
     - 'docker run --rm ci/r10k:${{ matrix.rubygem_r10k }} deploy environment -mv'
+    - './tests/podman_ssh_deploy.sh ci/r10k:${{ matrix.rubygem_r10k }}'
 .github/workflows/security_scanning.yml:
   scan_job_name: 'Scan r10k ${{ matrix.rubygem_r10k }} container'
   sarif_category: 'grype-r10k-${{ matrix.rubygem_r10k }}'
