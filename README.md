@@ -4,22 +4,42 @@
 [![License](https://img.shields.io/github/license/voxpupuli/container-r10k.svg)](https://github.com/voxpupuli/container-r10k/blob/main/LICENSE)
 [![Sponsored by betadots GmbH](https://img.shields.io/badge/Sponsored%20by-betadots%20GmbH-blue.svg)](https://www.betadots.de)
 
+- [Vox Pupuli R10K](#vox-pupuli-r10k)
+  - [Introduction](#introduction)
+  - [Breaking Changes / Migration Notes](#breaking-changes--migration-notes)
+  - [Usage](#usage)
+    - [Scheduled deploys](#scheduled-deploys)
+  - [Environment Variables](#environment-variables)
+  - [Build](#build)
+    - [Build Arguments](#build-arguments)
+  - [Version Schema](#version-schema)
+  - [How to release?](#how-to-release)
+  - [How to contribute?](#how-to-contribute)
+
 ## Introduction
 
-This container is designed for deploying Puppet code using r10k. It includes the r10k gem along with all necessary dependencies pre-installed, ensuring a seamless deployment process.
+This container is designed for deploying Puppet code using r10k.
+It includes the r10k gem along with all necessary dependencies pre-installed, ensuring a seamless deployment process.
+
+## Breaking Changes / Migration Notes
+
+see [MIGRATION.md](MIGRATION.md)
 
 ## Usage
 
 To run r10k, simply execute the container.
 The r10k binary is set as the default entrypoint.
-The container runs with group 0 (GID 0) and works under any UID; the default
-UID is 64604. Mounted volumes must be writable by group 0
-(`chgrp -R 0 <dir> && chmod -R g+rwX <dir>`; on Kubernetes, `fsGroup: 0` does
-this for you). The UID of mounted files does not matter.
+The container runs with group 0 (GID 0) and works under any UID.
+The default UID is 64604.
+Mounted volumes must be writable by group 0.
+Use `chgrp -R 0 <dir> && chmod -R g+rwX <dir>` to set the required permissions.
+On Kubernetes, `fsGroup: 0` does this for you.
+The UID of mounted files does not matter.
 
-In order to use git over SSH: mount the private key in `/home/puppet/.ssh/`
-either owned by the running UID and mode 0600, or owned by another UID and group-0 readable
-(e.g. a Kubernetes secret mounted with `fsGroup: 0`).
+To use Git over SSH, mount the private key in `/home/puppet/.ssh/`.
+The key can be owned by the running UID with mode 0600.
+Alternatively, it can be owned by another UID if it is readable by group 0.
+For example, mount a Kubernetes secret with `fsGroup: 0`.
 Provide a `known_hosts` file in `/home/puppet/.ssh/`.
 
 You can use a shared volume with a Puppet server and mount it at `/etc/puppetlabs/code/environments`.
@@ -40,7 +60,39 @@ services:
     command: ["deploy", "environment", "-mv"]
 ```
 
-### Environment Variables
+### Scheduled deploys
+
+The image includes `supercronic` for scheduled deployments.
+The default entrypoint starts `container-entrypoint.sh`.
+Override the entrypoint to use `supercronic` as the long-running process.
+Run each script in `/container-entrypoint.d/` before starting `supercronic`.
+This preserves the setup normally performed by the default entrypoint.
+
+Create a `crontab` file with the desired schedule.
+Supercronic supports seven-field cron expressions with seconds as the first field.
+The fields represent second, minute, hour, day of month, month, day of week, and year.
+This example deploys all environments every 15 minutes:
+
+```cron
+0 */15 * * * * * /usr/local/bin/r10k deploy environment -mv
+```
+
+Mount the crontab and override the entrypoint when starting the container:
+
+```shell
+podman run -d --name r10k-scheduled \
+  -v ./crontab:/crontab:ro \
+  -v code_dir:/etc/puppetlabs/code/environments:Z \
+  --entrypoint /bin/sh \
+  ghcr.io/voxpupuli/r10k:latest \
+  -c 'for f in /container-entrypoint.d/*.sh; do "$f"; done; exec supercronic /crontab'
+```
+
+The `exec` command makes `supercronic` the main container process.
+Job output and errors are written to the container's standard output and standard error streams.
+Use `podman logs r10k-scheduled` to view the output.
+
+## Environment Variables
 
 | Name | Description |
 | --- | --- |
