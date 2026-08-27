@@ -12,7 +12,16 @@ This container is designed for deploying Puppet code using r10k. It includes the
 
 To run r10k, simply execute the container.
 The r10k binary is set as the default entrypoint.
-The container operates as the puppet user with a UID/GID of 999.
+The container runs with group 0 (GID 0) and works under any UID; the default
+UID is 64604. Mounted volumes must be writable by group 0
+(`chgrp -R 0 <dir> && chmod -R g+rwX <dir>`; on Kubernetes, `fsGroup: 0` does
+this for you). The UID of mounted files does not matter.
+
+In order to use git over SSH: mount the private key in `/home/puppet/.ssh/`
+either owned by the running UID and mode 0600, or owned by another UID and group-0 readable
+(e.g. a Kubernetes secret mounted with `fsGroup: 0`).
+Provide a `known_hosts` file in `/home/puppet/.ssh/`.
+
 You can use a shared volume with a Puppet server and mount it at `/etc/puppetlabs/code/environments`.
 
 ```shell
@@ -46,8 +55,6 @@ services:
 | `RUBYGEM_R10K` | The r10k version to install |
 | `RUBYGEM_OPENVOX` | The openvox version to install |
 | `PUPPET_CONTROL_REPO` | The control repo url to get the Puppetfile from. Defaults to <https://github.com/voxpupuli/controlrepo.git> |
-| `UID` | The user id to use for the puppet user. Defaults to `999` |
-| `GID` | The group to use for the puppet user. Defaults to `ping` |
 
 ## Version Schema
 
