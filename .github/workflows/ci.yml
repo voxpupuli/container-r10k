@@ -75,6 +75,7 @@ jobs:
         run: |
           docker run --rm ci/r10k:${{ matrix.rubygem_r10k }} deploy environment -mv
           ./tests/podman_ssh_deploy.sh ci/r10k:${{ matrix.rubygem_r10k }}
+          ./tests/podman_ssh_deploy.sh ci/r10k:${{ matrix.rubygem_r10k }} 4321:0
 
   tests:
     name: Test suite
