@@ -29,14 +29,17 @@ see [MIGRATION.md](MIGRATION.md)
 
 To run r10k, simply execute the container.
 The r10k binary is set as the default entrypoint.
-The container runs with group 0 (GID 0) and works under any UID; the default
-UID is 64604. Mounted volumes must be writable by group 0
-(`chgrp -R 0 <dir> && chmod -R g+rwX <dir>`; on Kubernetes, `fsGroup: 0` does
-this for you). The UID of mounted files does not matter.
+The container runs with group 0 (GID 0) and works under any UID.
+The default UID is 64604.
+Mounted volumes must be writable by group 0.
+Use `chgrp -R 0 <dir> && chmod -R g+rwX <dir>` to set the required permissions.
+On Kubernetes, `fsGroup: 0` does this for you.
+The UID of mounted files does not matter.
 
-In order to use git over SSH: mount the private key in `/home/puppet/.ssh/`
-either owned by the running UID and mode 0600, or owned by another UID and group-0 readable
-(e.g. a Kubernetes secret mounted with `fsGroup: 0`).
+To use Git over SSH, mount the private key in `/home/puppet/.ssh/`.
+The key can be owned by the running UID with mode 0600.
+Alternatively, it can be owned by another UID if it is readable by group 0.
+For example, mount a Kubernetes secret with `fsGroup: 0`.
 Provide a `known_hosts` file in `/home/puppet/.ssh/`.
 
 You can use a shared volume with a Puppet server and mount it at `/etc/puppetlabs/code/environments`.
